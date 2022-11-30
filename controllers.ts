@@ -1,4 +1,4 @@
-import { Context } from "https://deno.land/x/oak/mod.ts"; 
+import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts"; 
 import scraper from "./utils/scraper.ts";
 
 const index = (ctx: Context) => {
@@ -7,8 +7,12 @@ const index = (ctx: Context) => {
     return;
 };
 
-const getPrices = (ctx: Context) => {
-    ctx.response.body = { msg: "prices" }
+const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
+    await next()
+
+    const scrap = await scraper()
+
+    ctx.response.body = { msg: "prices", scrap }
 
     return;
 };

@@ -11,4 +11,7 @@ deno run --allow-net --allow-env main.ts
 
 # or start the server and watch file changes
 deno run --allow-net --allow-env --watch main.ts
+
+# or start the server and debug on the browser
+deno run --unstable --inspect --allow-net --allow-env main.ts
 ```
