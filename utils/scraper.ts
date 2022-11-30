@@ -1,6 +1,17 @@
-import { cheerio } from "https://deno.land/x/cheerio@1.0.7/mod.ts";
+import * as cheerio from "https://esm.sh/cheerio@1.0.0-rc.12";
 
 const url = 'https://www.sapia.org.za/fuel-prices/';
+
+interface fuelInfo {
+    name: string,
+    prices: number[]
+}
+
+interface FuelPrice {
+    "year": number,
+    "coastal": fuelInfo[],
+    "inland": fuelInfo[]
+}
 
 const scraper = async () => {
     try {
@@ -10,16 +21,51 @@ const scraper = async () => {
 
         const fuelPriceTable = $('#tablepress-2022')
 
-        for (let i = 2; i <= 7; i++) {
-            let currRow = fuelPriceTable.find(`tbody tr:nth-child(${i})`)
+        const year = fuelPriceTable.find("thead tr th:first-child").text()
 
-            console.log('text', currRow)
+        const fuelPrices: FuelPrice = {
+            "year": Number(year),
+            "coastal": [],
+            "inland": []
         }
+
+        console.log(getPrices(fuelPriceTable, 2, 7))
+
+        fuelPrices.coastal = getPrices(fuelPriceTable, 2, 7)
+        fuelPrices.inland = getPrices(fuelPriceTable, 9, 15)
     
-        return fuelPriceTable.text()
+        return fuelPrices
     } catch(error) {
         console.log(error);
     }
+}
+
+const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, start: number, end: number) => {
+
+    const $ = cheerio.load(fuelPriceTable[0])
+    const tempInfoArr:fuelInfo[] = []
+
+    for (let i = start; i <= end; i++) {
+        const currRow = $(`tbody tr:nth-child(${i})`)
+
+        const fuelName = currRow.find('td:first-child').text().trim()
+        const elFuelPrices = currRow.find('td:not(:first-child)')
+
+        const tmpFuelInfo:fuelInfo = {
+            name: fuelName,
+            prices: []
+        }
+
+        elFuelPrices.each((_, el: cheerio.Element) => {
+            const tmpPrice = $(el).text().trim().replaceAll(",", ".")
+            tmpFuelInfo.prices.push(parseFloat(tmpPrice))
+        });
+
+        tempInfoArr.push(tmpFuelInfo)
+    }
+
+    return tempInfoArr
+
 }
 
 export default scraper
