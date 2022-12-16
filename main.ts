@@ -9,6 +9,4 @@ const app = new Application();
 
 app.use(router.routes());
 
-console.log(`Listening on port:${APP_PORT} ${APP_HOST}...`);
-
 await app.listen(`${APP_HOST}:${APP_PORT}`);

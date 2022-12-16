@@ -19,10 +19,10 @@ const scraper = async () => {
             "inland": []
         }
 
-        console.log(getPrices(fuelPriceTable, 2, 7))
+        console.log(getPrices(fuelPriceTable, Number(year), 2, 7))
 
-        fuelPrices.coastal = getPrices(fuelPriceTable, 2, 7)
-        fuelPrices.inland = getPrices(fuelPriceTable, 9, 15)
+        fuelPrices.coastal = getPrices(fuelPriceTable, Number(year), 2, 7)
+        fuelPrices.inland = getPrices(fuelPriceTable, Number(year), 9, 15)
     
         return fuelPrices
     } catch(error) {
@@ -30,10 +30,11 @@ const scraper = async () => {
     }
 }
 
-const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, start: number, end: number) => {
+const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, year: number, start: number, end: number) => {
 
     const $ = cheerio.load(fuelPriceTable[0])
     const tempInfoArr:fuelInfo[] = []
+    const monthlyFuelInfo = {}
 
     for (let i = start; i <= end; i++) {
         const currRow = $(`tbody tr:nth-child(${i})`)
@@ -46,7 +47,13 @@ const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, start: numb
             prices: []
         }
 
-        elFuelPrices.each((_, el: cheerio.Element) => {
+        elFuelPrices.each((idx, el: cheerio.Element) => {
+            const currMonth = `${year}-${idx+1}`
+
+            if(!monthlyFuelInfo[currMonth]) monthlyFuelInfo[currMonth] = {}
+
+            
+
             const tmpPrice = $(el).text().trim().replaceAll(",", ".")
             tmpFuelInfo.prices.push(parseFloat(tmpPrice))
         });
