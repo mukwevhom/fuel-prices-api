@@ -3,9 +3,9 @@ import { createInsertValues } from "./utils/index.ts";
 
 class Model {
     pool;
-    table: String;
+    table: string;
 
-    constructor(table: String) {
+    constructor(table: string) {
         this.pool = dbPool
         this.table = table
     }
@@ -17,7 +17,7 @@ class Model {
         try {
             let query = `SELECT ${columns} FROM ${this.table}`;
 
-            if (clause) query += clause;
+            if (clause) query += ` ${clause}`;
 
             result = await client.queryObject(query);
         } finally {
@@ -28,7 +28,7 @@ class Model {
 
     }
 
-    async insert(columns: String, values: any) {
+    async insert(columns: string, values: (string|number)[][]) {
         const client = await this.pool.connect();
         const transaction = client.createTransaction(`${this.table}_transact`);
 
@@ -37,7 +37,7 @@ class Model {
         try {
             await transaction.begin();
 
-            const valuesPlaceholder = columns.split(',').map((_t, i) => `$${i+1}`).join(', ')
+            const _valuesPlaceholder = columns.split(',').map((_t, i) => `$${i+1}`).join(', ')
 
             const query = `INSERT INTO ${this.table}(${columns}) VALUES ${createInsertValues(values)}`;
             

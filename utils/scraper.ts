@@ -9,7 +9,7 @@ const scraper = async () => {
         const html = await res.text();
         const $ = cheerio.load(html)
 
-        const fuelPriceTable = $('#tablepress-2022')
+        const fuelPriceTable = $('.tablepress')
 
         const year = fuelPriceTable.find("thead tr th:first-child").text()
 
@@ -19,10 +19,8 @@ const scraper = async () => {
             "inland": []
         }
 
-        console.log(getPrices(fuelPriceTable, Number(year), 2, 7))
-
-        fuelPrices.coastal = getPrices(fuelPriceTable, Number(year), 2, 7)
-        fuelPrices.inland = getPrices(fuelPriceTable, Number(year), 9, 15)
+        fuelPrices.coastal = getPrices(fuelPriceTable, 2, 7)
+        fuelPrices.inland = getPrices(fuelPriceTable, 9, 15)
     
         return fuelPrices
     } catch(error) {
@@ -30,11 +28,9 @@ const scraper = async () => {
     }
 }
 
-const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, year: number, start: number, end: number) => {
-
+const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, start: number, end: number) => {
     const $ = cheerio.load(fuelPriceTable[0])
     const tempInfoArr:fuelInfo[] = []
-    const monthlyFuelInfo = {}
 
     for (let i = start; i <= end; i++) {
         const currRow = $(`tbody tr:nth-child(${i})`)
@@ -47,13 +43,7 @@ const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, year: numbe
             prices: []
         }
 
-        elFuelPrices.each((idx, el: cheerio.Element) => {
-            const currMonth = `${year}-${idx+1}`
-
-            if(!monthlyFuelInfo[currMonth]) monthlyFuelInfo[currMonth] = {}
-
-            
-
+        elFuelPrices.each((_, el: cheerio.Element) => {
             const tmpPrice = $(el).text().trim().replaceAll(",", ".")
             tmpFuelInfo.prices.push(parseFloat(tmpPrice))
         });
