@@ -16,3 +16,7 @@ export interface FuelPrice {
     "coastal": fuelInfo[],
     "inland": fuelInfo[]
 }
+
+export interface CHANGE_JSON {
+    [key: string]: any
+}

@@ -1,8 +1,10 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts"; 
+import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 import Model from "./model.ts";
 import scraper from "./utils/scraper.ts";
 import { JSON_Obj, fuelInfo } from "./utils/types.ts";
 import { COASTAL_FUEL_NAMES, INLAND_FUEL_NAMES } from "./utils/constants.ts";
+import { comparePrices } from "./utils/helpers.ts";
 
 const coastalModel = new Model('coastal_prices')
 const inlandModel = new Model('inland_prices')
@@ -19,12 +21,36 @@ const index = async (ctx: Context) => {
 
 const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
     await next()
-
-    const columns = "month, _95_lrp, _95_ulp, diesel_005, diesel_0005, illuminating_paraffin, liquefied_petroleum_gas"
-
-    const {rows: data} = await coastalModel.select(columns, "WHERE month='2023-01'")
+    const url = new URL(ctx.request.url);
+    const compareParam = url.searchParams.get("compare")
     
-    ctx.response.body = { msg: "prices", data }
+    let pricesJSON
+
+    const currMonth = format(new Date(), "yyyy-MM")
+
+    const {rows: currMonthData} = await inlandModel.select('*', `WHERE month='${currMonth}'`)
+
+    if(compareParam) {
+        if(compareParam === "latest") {
+            pricesJSON = currMonthData[0]
+            const prevMonth = +format(new Date(), "MM")-1
+            const prevYear = format(new Date(), "yyyy")
+
+            const prevDate = `${prevYear}-${String(prevMonth).padStart(2, '0')}`
+
+            const {rows: data} = await inlandModel.select('*', `WHERE month='${prevDate}' OR month='${currMonth}'`)
+
+            if(data.length === 2) {
+                comparePrices(data)
+            }
+        }
+    } else {
+        pricesJSON = currMonthData[0]
+    }
+
+
+    
+    ctx.response.body = { msg: "prices", prices: pricesJSON }
 
     return;
 };
@@ -115,4 +141,4 @@ const getScrap = async (ctx: Context) => {
     return;
 };
  
- export { index, getPrices, getScrap}
+export { index, getPrices, getScrap}
