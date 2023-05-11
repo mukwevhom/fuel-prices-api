@@ -1,4 +1,4 @@
-import { FULL_FUEL_NAMES, INLAND_FUEL_NAMES } from "./constants.ts"
+import { FULL_FUEL_NAMES } from "./constants.ts"
 import { CHANGE_JSON } from "./types.ts"
 
 const comparePrices = (data:any[]) => {
