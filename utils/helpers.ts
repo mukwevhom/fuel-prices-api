@@ -13,7 +13,7 @@ const comparePrices = (data:any[]) => {
             changeData.push({
                 id: key,
                 name: currFuel?.name,
-                diff: Math.abs(diff).toFixed(2),
+                price: Math.abs(diff).toFixed(2),
                 change: diff > 0 ? 'down' : 'up'
                 
             })
