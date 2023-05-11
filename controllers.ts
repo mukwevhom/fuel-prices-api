@@ -24,7 +24,7 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
     const url = new URL(ctx.request.url);
     const compareParam = url.searchParams.get("compare")
     
-    let pricesJSON
+    let pricesJSON, pricesChangesJSON
 
     const currMonth = format(new Date(), "yyyy-MM")
 
@@ -41,7 +41,7 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
             const {rows: data} = await inlandModel.select('*', `WHERE month='${prevDate}' OR month='${currMonth}'`)
 
             if(data.length === 2) {
-                comparePrices(data)
+                pricesChangesJSON = comparePrices(data)
             }
         }
     } else {
@@ -50,7 +50,7 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
 
 
     
-    ctx.response.body = { msg: "prices", prices: pricesJSON }
+    ctx.response.body = { msg: "prices", prices: pricesJSON, priceChanges: pricesChangesJSON }
 
     return;
 };
