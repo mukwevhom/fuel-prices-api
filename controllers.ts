@@ -48,8 +48,6 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
         pricesJSON = currMonthData[0]
     }
 
-
-    
     ctx.response.body = { msg: "prices", prices: pricesJSON, priceChanges: pricesChangesJSON }
 
     return;

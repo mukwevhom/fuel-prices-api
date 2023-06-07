@@ -20,7 +20,7 @@ const scraper = async () => {
         }
 
         fuelPrices.coastal = getPrices(fuelPriceTable, 2, 7)
-        fuelPrices.inland = getPrices(fuelPriceTable, 9, 15)
+        fuelPrices.inland = getPrices(fuelPriceTable, 10, 16)
     
         return fuelPrices
     } catch(error) {
