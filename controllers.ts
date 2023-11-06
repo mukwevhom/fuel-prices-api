@@ -42,7 +42,6 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
             pricesJSON = currMonthData[0]
 
             const prevDate = getCurrentMonth(prevMonthChange)
-            console.log(prevDate, currMonth)
 
             const {rows: data} = await inlandModel.select('*', `WHERE month='${prevDate}' OR month='${currMonth}'`)
 

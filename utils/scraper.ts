@@ -24,7 +24,7 @@ const scraper = async () => {
     
         return fuelPrices
     } catch(error) {
-        console.log(error);
+        throw error
     }
 }
 
