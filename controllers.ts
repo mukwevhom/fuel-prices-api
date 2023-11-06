@@ -1,10 +1,9 @@
-import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts"; 
-import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
+import { Context } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Model from "./model.ts";
 import scraper from "./utils/scraper.ts";
 import { JSON_Obj, fuelInfo } from "./utils/types.ts";
 import { COASTAL_FUEL_NAMES, INLAND_FUEL_NAMES } from "./utils/constants.ts";
-import { comparePrices } from "./utils/helpers.ts";
+import { comparePrices, getCurrentMonth } from "./utils/helpers.ts";
 
 const coastalModel = new Model('coastal_prices')
 const inlandModel = new Model('inland_prices')
@@ -26,17 +25,24 @@ const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
     
     let pricesJSON, pricesChangesJSON
 
-    const currMonth = format(new Date(), "yyyy-MM")
+    let currMonth = getCurrentMonth()
+    let prevMonthChange = 0
 
-    const {rows: currMonthData} = await inlandModel.select('*', `WHERE month='${currMonth}'`)
+    let { rows: currMonthData } = await inlandModel.select('*', `WHERE month='${currMonth}'`)
+
+    if(currMonthData.length === 0) {
+        currMonth = getCurrentMonth(0)
+        prevMonthChange = -1;
+
+        ({rows: currMonthData} = await inlandModel.select('*', `WHERE month='${currMonth}'`))
+    }
 
     if(compareParam) {
         if(compareParam === "latest") {
             pricesJSON = currMonthData[0]
-            const prevMonth = +format(new Date(), "MM")-1
-            const prevYear = format(new Date(), "yyyy")
 
-            const prevDate = `${prevYear}-${String(prevMonth).padStart(2, '0')}`
+            const prevDate = getCurrentMonth(prevMonthChange)
+            console.log(prevDate, currMonth)
 
             const {rows: data} = await inlandModel.select('*', `WHERE month='${prevDate}' OR month='${currMonth}'`)
 
@@ -74,7 +80,7 @@ const getScrap = async (ctx: Context) => {
         })
     })
 
-    const coastalValueArray = []
+    const coastalValueArray: Array<string|number>[] = []
 
     for(const month in coastalFuelData) {
         const {rows: data} = await coastalModel.select('*', `WHERE month='${month}'`)
@@ -83,6 +89,7 @@ const getScrap = async (ctx: Context) => {
             const monthArray:Array<string|number> = []
 
             monthArray.push(month)
+
             for(const fuel in coastalFuelData[month]) {
                 monthArray.push(coastalFuelData[month][fuel])
             }
@@ -113,7 +120,7 @@ const getScrap = async (ctx: Context) => {
         })
     })
 
-    const inlandValueArray = []
+    const inlandValueArray: Array<string|number>[] = []
 
     for(const month in inlandFuelData) {
         const {rows: data} = await inlandModel.select('*', `WHERE month='${month}'`)

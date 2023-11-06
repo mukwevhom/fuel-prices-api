@@ -23,4 +23,12 @@ const comparePrices = (data:any[]) => {
     return changeData
 }
 
-export { comparePrices }
+const getCurrentMonth = (monthChange: number = 1) => {
+    const date = new Date()
+    const month = date.getMonth() + monthChange
+    const year = date.getFullYear()
+
+    return `${year}-${month.toString().padStart(2, '0')}`
+}
+
+export { comparePrices, getCurrentMonth }
