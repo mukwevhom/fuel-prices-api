@@ -11,5 +11,6 @@ app.use(router.routes());
 app.listen({ port: APP_PORT });
 
 Deno.cron("Scrap Latest Petrol Prices", "*\/2  * * * *", async () => {
-    await fetch(`/scrap`);
+    console.log("Scraping Latest Petrol Prices", APP_PORT);
+    await fetch(`https://uc-fuel-scrapper.deno.dev/scrap`);
 });
