@@ -11,5 +11,5 @@ app.use(router.routes());
 app.listen({ port: APP_PORT });
 
 Deno.cron("Scrap Latest Petrol Prices", "*\/5  * * * *", async () => {
-    await fetch(`http://localhost:${APP_PORT}/scrap`);
+    await fetch(`/scrap`);
 });
