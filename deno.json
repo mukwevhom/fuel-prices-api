@@ -1,0 +1,12 @@
+{
+    "imports": {
+      "std/": "https://deno.land/std@0.218.2/",
+      "oak/": "https://deno.land/x/oak@v14.1.1/",
+      "postgres/": "https://deno.land/x/postgres@v0.17.0/"
+    },
+    "tasks": {
+      "start": "deno run --allow-net --allow-read --allow-env --unstable-cron main.ts",
+      "dev": "deno run --allow-net --allow-read --allow-env --unstable-cron --watch main.ts",
+      "inspect": "deno run --allow-net --allow-env --allow-read --unstable-cron --inspect main.ts"
+    }
+}

@@ -13,7 +13,7 @@
             "runtimeExecutable": "deno",
             "runtimeArgs": [
                 "run",
-                "--unstable",
+                "--unstable-cron",
                 "--inspect",
                 "--allow-all"
             ],

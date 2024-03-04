@@ -7,11 +7,11 @@ Fuel Price API is an api for various fuel type in South Africa. The source for t
 Once you've cloned the project project, use the command below for the start a development server:
 
 ```bash
-deno run --allow-net --allow-env --allow-read main.ts
+deno task start
 
 # or start the server and watch file changes
-deno run --allow-net --allow-env --allow-read --watch main.ts
+deno task dev
 
 # or start the server and debug on the browser
-deno run --unstable --inspect --allow-net --allow-env --allow-read main.ts
+deno task inspect
 ```

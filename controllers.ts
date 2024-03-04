@@ -1,4 +1,4 @@
-import { Context } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { Context } from "oak/mod.ts";
 import Model from "./model.ts";
 import scraper from "./utils/scraper.ts";
 import { JSON_Obj, fuelInfo } from "./utils/types.ts";

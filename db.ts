@@ -1,5 +1,5 @@
-import { Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
-import "https://deno.land/std@0.205.0/dotenv/load.ts";
+import { Pool } from "postgres/mod.ts";
+import "std/dotenv/load.ts";
 
 const POOL_CONNECTIONS = 20;
 const dbPool = new Pool(Deno.env.get("POSTGRESQL_CONNECTION_URI"), POOL_CONNECTIONS);
