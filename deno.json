@@ -1,12 +1,20 @@
 {
-    "imports": {
-      "std/": "https://deno.land/std@0.223.0/",
-      "oak/": "https://deno.land/x/oak@v15.0.0/",
-      "postgres/": "https://deno.land/x/postgres@v0.19.2/"
-    },
-    "tasks": {
-      "start": "deno run --allow-net --allow-read --allow-env --unstable-cron main.ts",
-      "dev": "deno run --allow-net --allow-read --allow-env --unstable-cron --watch main.ts",
-      "inspect": "deno run --allow-net --allow-env --allow-read --unstable-cron --inspect main.ts"
-    }
+  "imports": {
+    "std/": "https://deno.land/std@0.223.0/",
+    "oak/": "https://deno.land/x/oak@v15.0.0/",
+    "postgres/": "https://deno.land/x/postgres@v0.19.2/"
+  },
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-env --unstable-cron main.ts",
+    "dev": "deno run --allow-net --allow-read --allow-env --unstable-cron --watch main.ts",
+    "inspect": "deno run --allow-net --allow-env --allow-read --unstable-cron --inspect main.ts"
+  },
+  "deploy": {
+    "project": "bcaffe74-9248-4a22-a7c7-fb28679b503b",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
+  }
 }
