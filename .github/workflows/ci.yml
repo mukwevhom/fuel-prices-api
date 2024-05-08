@@ -1,0 +1,33 @@
+name: CI
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [main]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+    deploy:
+        permissions:
+          contents: write
+          id-token: write
+          deployments: write
+        timeout-minutes: 3.5
+        runs-on: ["ubuntu-latest"]
+        steps:
+          - name: "🏨 Checkout"
+            uses: actions/checkout@v3
+    
+          - name: "🦕 Setup Deno"
+            uses: denoland/setup-deno@v1
+            with:
+              deno-version: vx.x.x
+        
+          - name: "Install deployctl"
+            run: deno install --allow-all --no-check --reload --force https://deno.land/x/deploy/deployctl.ts
+
+          - name: "🥬 Deploy App"
+            run: |
+                deployctl deploy --token="${{ secrets.DENO_DEPLOY_TOKEN }}" --="uc-fuel-scrapper" --prod
