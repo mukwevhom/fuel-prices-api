@@ -1,7 +1,7 @@
 import * as cheerio from "https://esm.sh/cheerio@1.0.0-rc.12";
 import { fuelInfo, FuelPrice } from "./types.ts";
 
-const url = 'https://www.sapia.org.za/fuel-prices/';
+const url = 'https://fuelsindustry.org.za/fuel-prices/';
 
 const scraper = async () => {
     try {
