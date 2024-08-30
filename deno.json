@@ -1,7 +1,7 @@
 {
   "imports": {
     "std/": "https://deno.land/std@0.224.0/",
-    "oak/": "https://deno.land/x/oak@v16.0.0/",
+    "oak/": "https://deno.land/x/oak@v16.1.0/",
     "postgres/": "https://deno.land/x/postgres@v0.19.3/",
     "sentry/": "https://deno.land/x/sentry@8.27.0/"
   },
