@@ -20,6 +20,7 @@
       "jsr:@std/media-types@0.222": "jsr:@std/media-types@0.222.1",
       "jsr:@std/media-types@0.223": "jsr:@std/media-types@0.223.0",
       "jsr:@std/path@0.223": "jsr:@std/path@0.223.0",
+      "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:path-to-regexp@6.2.1": "npm:path-to-regexp@6.2.1"
     },
     "jsr": {
@@ -97,11 +98,18 @@
       }
     },
     "npm": {
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
+      },
       "path-to-regexp@6.2.1": {
         "integrity": "sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==",
         "dependencies": {}
       }
     }
+  },
+  "redirects": {
+    "https://deno.land/x/sentry/index.mjs": "https://deno.land/x/sentry@8.27.0/index.mjs"
   },
   "remote": {
     "https://deno.land/std@0.165.0/_util/asserts.ts": "d0844e9b62510f89ce1f9878b046f6a57bf88f208a10304aab50efcb48365272",
@@ -316,6 +324,7 @@
     "https://deno.land/x/postgres@v0.19.3/query/types.ts": "540f6f973d493d63f2c0059a09f3368071f57931bba68bea408a635a3e0565d6",
     "https://deno.land/x/postgres@v0.19.3/utils/deferred.ts": "5420531adb6c3ea29ca8aac57b9b59bd3e4b9a938a4996bbd0947a858f611080",
     "https://deno.land/x/postgres@v0.19.3/utils/utils.ts": "ca47193ea03ff5b585e487a06f106d367e509263a960b787197ce0c03113a738",
+    "https://deno.land/x/sentry@8.27.0/index.mjs": "8306208669d93169c864590efb2c291154f1beb9030c52f5114ca1f8ce3eca75",
     "https://esm.sh/cheerio@1.0.0-rc.12": "8dc1f6506d653c6cb3569f091d8f7fc1ebb055dda48ad213918f86e0d14741e9",
     "https://esm.sh/v99/boolbase@1.0.0/deno/boolbase.js": "c2de9c6051e43e825cebf96303dccc8c84d84db898ee48f19cb64a52df887f31",
     "https://esm.sh/v99/cheerio-select@2.1.0/deno/cheerio-select.js": "c7e3dc8954fb74f6062fd0459c6499f41fac5c1384c261560ccd45ee4ad1511a",

@@ -1,4 +1,10 @@
 import { Application } from "oak/mod.ts";
+import * as Sentry from "sentry/index.mjs";
+
+Sentry.init({
+    dsn: Deno.env.get("SENTRY_DSN"),
+    tracesSampleRate: 1.0,
+});
 
 import router from "./routes.ts";
 

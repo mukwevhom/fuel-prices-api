@@ -1,4 +1,5 @@
 import { Context } from "oak/mod.ts";
+import * as Sentry from "sentry/index.mjs";
 import Model from "./model.ts";
 import scraper from "./utils/scraper.ts";
 import { JSON_Obj, fuelInfo } from "./utils/types.ts";
@@ -9,13 +10,16 @@ const coastalModel = new Model('coastal_prices')
 const inlandModel = new Model('inland_prices')
 
 const index = async (ctx: Context) => {
-    const {rows: coastalResults} = await coastalModel.select()
+    try {
+        const {rows: coastalResults} = await coastalModel.select()
 
-    const {rows: inlandResults} = await inlandModel.select()
-    
-    ctx.response.body = { msg: "test", coastalResults, inlandResults }
-
-    return;
+        const {rows: inlandResults} = await inlandModel.select()
+        
+        ctx.response.body = { msg: "fuel prices", coastalResults, inlandResults }
+        return;
+    } catch (err) {
+        Sentry.captureException(err);
+    }
 };
 
 const getPrices = async (ctx: Context, next: () => Promise<unknown>) => {
