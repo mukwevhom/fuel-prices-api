@@ -1,4 +1,4 @@
-import * as cheerio from "https://esm.sh/cheerio@1.0.0-rc.12";
+import * as cheerio from "cheerio/";
 import { fuelInfo, FuelPrice } from "./types.ts";
 
 const url = 'https://fuelsindustry.org.za/fuel-prices/';

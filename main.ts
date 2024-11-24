@@ -1,4 +1,4 @@
-import { Application } from "oak/mod.ts";
+import { Application } from "@oak/oak/application";
 import * as Sentry from "sentry/index.mjs";
 
 Sentry.init({

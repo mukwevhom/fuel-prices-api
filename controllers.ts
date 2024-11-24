@@ -1,4 +1,4 @@
-import { Context } from "oak/mod.ts";
+import { Context } from "@oak/oak";
 import * as Sentry from "sentry/index.mjs";
 import Model from "./model.ts";
 import scraper from "./utils/scraper.ts";
