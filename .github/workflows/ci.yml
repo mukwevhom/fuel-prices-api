@@ -21,12 +21,12 @@ jobs:
             uses: actions/checkout@v4
     
           - name: "🦕 Setup Deno"
-            uses: denoland/setup-deno@v1
+            uses: denoland/setup-deno@v2
             with:
-              deno-version: v1.46.2
+              deno-version: v2.1.1
         
           - name: "Install deployctl"
-            run: deno install --allow-all --no-check --reload --force https://deno.land/x/deploy/deployctl.ts
+            run: deno install -gArf jsr:@deno/deployctl
 
           - name: "🥬 Deploy App"
             run: |
