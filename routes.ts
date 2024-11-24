@@ -1,4 +1,4 @@
-import { Router } from "oak/mod.ts";
+import { Router } from "@oak/oak/router";
 import {getPrices, getScrap, index} from "./controllers.ts";
 
 const router = new Router()
