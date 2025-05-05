@@ -9,10 +9,6 @@ const scraper = async () => {
         const html = await res.text();
         const $ = cheerio.load(html)
 
-        // const fuelPriceTable = $('.tablepress')
-
-        // const year = fuelPriceTable.find("thead tr th:first-child").text()
-
         const coastalTable = $('#table_1')
         const inlandTable = $('#table_2')
 
