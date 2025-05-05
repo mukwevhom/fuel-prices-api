@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio/";
 import { fuelInfo, FuelPrice } from "./types.ts";
 
-const url = 'https://fuelsindustry.org.za/fuel-prices/';
+const url = 'https://fuelsindustry.org.za/consumer-information/fuel-prices-current-past/';
 
 const scraper = async () => {
     try {
@@ -9,18 +9,23 @@ const scraper = async () => {
         const html = await res.text();
         const $ = cheerio.load(html)
 
-        const fuelPriceTable = $('.tablepress')
+        // const fuelPriceTable = $('.tablepress')
 
-        const year = fuelPriceTable.find("thead tr th:first-child").text()
+        // const year = fuelPriceTable.find("thead tr th:first-child").text()
+
+        const coastalTable = $('#table_1')
+        const inlandTable = $('#table_2')
+
+        const year = getYear(coastalTable)
 
         const fuelPrices: FuelPrice = {
-            "year": Number(year),
+            "year": year,
             "coastal": [],
             "inland": []
         }
 
-        fuelPrices.coastal = getPrices(fuelPriceTable, 2, 7)
-        fuelPrices.inland = getPrices(fuelPriceTable, 10, 16)
+        fuelPrices.coastal = getPrices(coastalTable, 1, 6)
+        fuelPrices.inland = getPrices(inlandTable, 1, 6)
     
         return fuelPrices
     } catch(error) {
@@ -53,6 +58,15 @@ const getPrices = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>, start: numb
 
     return tempInfoArr
 
+}
+
+const getYear = (fuelPriceTable: cheerio.Cheerio<cheerio.Element>) => {
+    const $ = cheerio.load(fuelPriceTable[0])
+
+    const currYearFirstDate = $("thead tr th:nth-child(2)").text()
+    const strYear = currYearFirstDate.split("-").at(-1)
+
+    return Number('20'+strYear)
 }
 
 export default scraper
