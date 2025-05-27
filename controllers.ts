@@ -1,5 +1,5 @@
 import { Context } from "@oak/oak";
-import * as Sentry from "sentry/index.mjs";
+import * as Sentry from "sentry";
 import Model from "./model.ts";
 import {scraper, historicalScraper} from "./utils/scraper.ts";
 import { JSON_Obj, fuelInfo } from "./utils/types.ts";

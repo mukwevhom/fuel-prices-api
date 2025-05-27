@@ -1,17 +1,19 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@oak/commons@1": "1.0.0",
     "jsr:@oak/oak@^17.1.4": "17.1.4",
     "jsr:@std/assert@1": "1.0.12",
     "jsr:@std/bytes@1": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
-    "jsr:@std/dotenv@~0.225.3": "0.225.3",
+    "jsr:@std/dotenv@~0.225.5": "0.225.5",
     "jsr:@std/encoding@1": "1.0.9",
     "jsr:@std/encoding@^1.0.9": "1.0.9",
     "jsr:@std/http@1": "1.0.14",
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
+    "npm:@sentry/deno@*": "9.22.0",
+    "npm:@types/node@*": "22.14.1",
     "npm:path-to-regexp@^6.3.0": "6.3.0"
   },
   "jsr": {
@@ -47,8 +49,8 @@
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
     },
-    "@std/dotenv@0.225.3": {
-      "integrity": "a95e5b812c27b0854c52acbae215856d9cce9d4bbf774d938c51d212711e8d4a"
+    "@std/dotenv@0.225.5": {
+      "integrity": "9ce6f9d0ec3311f74a32535aa1b8c62ed88b1ab91b7f0815797d77a6f60c922f"
     },
     "@std/encoding@1.0.9": {
       "integrity": "025b8f18eb1749bc30d1353bf48b77d1eb5e35610220fa226f5a046b9240c5d7"
@@ -67,8 +69,26 @@
     }
   },
   "npm": {
+    "@sentry/core@9.22.0": {
+      "integrity": "sha512-ixvtKmPF42Y6ckGUbFlB54OWI75H2gO5UYHojO6eXFpS7xO3ZGgV/QH6wb40mWK+0w5XZ0233FuU9VpsuE6mKA=="
+    },
+    "@sentry/deno@9.22.0": {
+      "integrity": "sha512-PMvOsuZVpRnjc0e+YLKdaKGaLEHoDr9MggP845xt8ZYIRykofnUjiPN3djh+FLuFazG3SGjneMkPd7prOy61Cw==",
+      "dependencies": [
+        "@sentry/core"
+      ]
+    },
+    "@types/node@22.14.1": {
+      "integrity": "sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "path-to-regexp@6.3.0": {
       "integrity": "sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ=="
+    },
+    "undici-types@6.21.0": {
+      "integrity": "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="
     }
   },
   "redirects": {
@@ -274,7 +294,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@oak/oak@^17.1.4",
-      "jsr:@std/dotenv@~0.225.3"
+      "jsr:@std/dotenv@~0.225.5",
+      "npm:@sentry/deno@*"
     ]
   }
 }

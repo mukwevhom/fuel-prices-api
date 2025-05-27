@@ -1,5 +1,5 @@
 import { Application } from "@oak/oak/application";
-import * as Sentry from "sentry/index.mjs";
+import * as Sentry from "sentry";
 
 Sentry.init({
     dsn: Deno.env.get("SENTRY_DSN"),

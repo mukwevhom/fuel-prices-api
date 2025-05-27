@@ -1,9 +1,9 @@
 {
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.3",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
     "postgres/": "https://deno.land/x/postgres@v0.19.3/",
-    "sentry/": "https://deno.land/x/sentry@8.40.0/",
+    "sentry": "npm:@sentry/deno",
     "cheerio/": "https://esm.sh/cheerio@1.0.0/"
   },
   "tasks": {
