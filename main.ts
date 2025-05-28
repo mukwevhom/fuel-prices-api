@@ -3,7 +3,9 @@ import * as Sentry from "sentry";
 
 Sentry.init({
     dsn: Deno.env.get("SENTRY_DSN"),
+    sendDefaultPii: true,
     tracesSampleRate: 1.0,
+    tracePropagationTargets: ["localhost", /^https:\/\/fuel\.underconstruction\.co\.za/],
 });
 
 import router from "./routes.ts";
