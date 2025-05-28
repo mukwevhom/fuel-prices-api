@@ -1,6 +1,6 @@
 # Fuel Price API
 
-Fuel Price API is an api for various fuel type in South Africa. The source for this API is [SAPIA](https://www.sapia.org.za/fuel-prices/)
+Fuel Price API is an api for various fuel type in South Africa. The source for this API is [FIASA](https://fuelsindustry.org.za/consumer-information/fuel-prices-current-past/)
 
 ## Developing
 
