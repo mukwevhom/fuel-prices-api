@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@oak/commons@1": "1.0.0",
-    "jsr:@oak/oak@^17.1.4": "17.1.4",
+    "jsr:@oak/oak@^17.1.5": "17.1.5",
     "jsr:@std/assert@1": "1.0.12",
     "jsr:@std/bytes@1": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
@@ -12,7 +12,7 @@
     "jsr:@std/http@1": "1.0.14",
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
-    "npm:@sentry/deno@*": "9.22.0",
+    "npm:@sentry/deno@9.40.0": "9.40.0",
     "npm:@types/node@*": "22.14.1",
     "npm:path-to-regexp@^6.3.0": "6.3.0"
   },
@@ -28,8 +28,8 @@
         "jsr:@std/media-types"
       ]
     },
-    "@oak/oak@17.1.4": {
-      "integrity": "60530b582bf276ff741e39cc664026781aa08dd5f2bc5134d756cc427bf2c13e",
+    "@oak/oak@17.1.5": {
+      "integrity": "676263340dcfd069fb422b4274b4f75f7048a68e605dece6a2897ccfe669e7cc",
       "dependencies": [
         "jsr:@oak/commons",
         "jsr:@std/assert",
@@ -69,11 +69,11 @@
     }
   },
   "npm": {
-    "@sentry/core@9.22.0": {
-      "integrity": "sha512-ixvtKmPF42Y6ckGUbFlB54OWI75H2gO5UYHojO6eXFpS7xO3ZGgV/QH6wb40mWK+0w5XZ0233FuU9VpsuE6mKA=="
+    "@sentry/core@9.40.0": {
+      "integrity": "sha512-cZkuz6BDna6VXSqvlWnrRsaDx4QBKq1PcfQrqhVz8ljs0M7Gcl+Mtj8dCzUxx12fkYM62hQXG72DEGNlAQpH/Q=="
     },
-    "@sentry/deno@9.22.0": {
-      "integrity": "sha512-PMvOsuZVpRnjc0e+YLKdaKGaLEHoDr9MggP845xt8ZYIRykofnUjiPN3djh+FLuFazG3SGjneMkPd7prOy61Cw==",
+    "@sentry/deno@9.40.0": {
+      "integrity": "sha512-fpccmhlhJ8FtzIVg53VVOo/PbV+7brzfN7b3DLdCCFmbm8Dss01pftlgBljZAGbHBvaCmwLFI1Ik703RpXci5g==",
       "dependencies": [
         "@sentry/core"
       ]
@@ -293,9 +293,9 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@oak/oak@^17.1.4",
+      "jsr:@oak/oak@^17.1.5",
       "jsr:@std/dotenv@~0.225.5",
-      "npm:@sentry/deno@*"
+      "npm:@sentry/deno@9.40.0"
     ]
   }
 }
