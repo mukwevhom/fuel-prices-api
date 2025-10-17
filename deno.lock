@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@oak/commons@1": "1.0.0",
-    "jsr:@oak/oak@^17.1.5": "17.1.5",
+    "jsr:@oak/oak@^17.1.6": "17.1.6",
     "jsr:@std/assert@1": "1.0.12",
     "jsr:@std/bytes@1": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
@@ -13,6 +13,7 @@
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
     "npm:@sentry/deno@9.40.0": "9.40.0",
+    "npm:@sentry/integrations@*": "7.114.0",
     "npm:@types/node@*": "22.14.1",
     "npm:path-to-regexp@^6.3.0": "6.3.0"
   },
@@ -28,8 +29,8 @@
         "jsr:@std/media-types"
       ]
     },
-    "@oak/oak@17.1.5": {
-      "integrity": "676263340dcfd069fb422b4274b4f75f7048a68e605dece6a2897ccfe669e7cc",
+    "@oak/oak@17.1.6": {
+      "integrity": "c7eef2eec733fba8e72b679bba3b8cf2fceccf5ef489a8b8fb43571908c0335d",
       "dependencies": [
         "jsr:@oak/commons",
         "jsr:@std/assert",
@@ -69,19 +70,59 @@
     }
   },
   "npm": {
+    "@sentry/core@7.114.0": {
+      "integrity": "sha512-YnanVlmulkjgZiVZ9BfY9k6I082n+C+LbZo52MTvx3FY6RE5iyiPMpaOh67oXEZRWcYQEGm+bKruRxLVP6RlbA==",
+      "dependencies": [
+        "@sentry/types",
+        "@sentry/utils"
+      ]
+    },
     "@sentry/core@9.40.0": {
       "integrity": "sha512-cZkuz6BDna6VXSqvlWnrRsaDx4QBKq1PcfQrqhVz8ljs0M7Gcl+Mtj8dCzUxx12fkYM62hQXG72DEGNlAQpH/Q=="
     },
     "@sentry/deno@9.40.0": {
       "integrity": "sha512-fpccmhlhJ8FtzIVg53VVOo/PbV+7brzfN7b3DLdCCFmbm8Dss01pftlgBljZAGbHBvaCmwLFI1Ik703RpXci5g==",
       "dependencies": [
-        "@sentry/core"
+        "@sentry/core@9.40.0"
+      ]
+    },
+    "@sentry/integrations@7.114.0": {
+      "integrity": "sha512-BJIBWXGKeIH0ifd7goxOS29fBA8BkEgVVCahs6xIOXBjX1IRS6PmX0zYx/GP23nQTfhJiubv2XPzoYOlZZmDxg==",
+      "dependencies": [
+        "@sentry/core@7.114.0",
+        "@sentry/types",
+        "@sentry/utils",
+        "localforage"
+      ]
+    },
+    "@sentry/types@7.114.0": {
+      "integrity": "sha512-tsqkkyL3eJtptmPtT0m9W/bPLkU7ILY7nvwpi1hahA5jrM7ppoU0IMaQWAgTD+U3rzFH40IdXNBFb8Gnqcva4w=="
+    },
+    "@sentry/utils@7.114.0": {
+      "integrity": "sha512-319N90McVpupQ6vws4+tfCy/03AdtsU0MurIE4+W5cubHME08HtiEWlfacvAxX+yuKFhvdsO4K4BB/dj54ideg==",
+      "dependencies": [
+        "@sentry/types"
       ]
     },
     "@types/node@22.14.1": {
       "integrity": "sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==",
       "dependencies": [
         "undici-types"
+      ]
+    },
+    "immediate@3.0.6": {
+      "integrity": "sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ=="
+    },
+    "lie@3.1.1": {
+      "integrity": "sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==",
+      "dependencies": [
+        "immediate"
+      ]
+    },
+    "localforage@1.10.0": {
+      "integrity": "sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==",
+      "dependencies": [
+        "lie"
       ]
     },
     "path-to-regexp@6.3.0": {
@@ -293,7 +334,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@oak/oak@^17.1.5",
+      "jsr:@oak/oak@^17.1.6",
       "jsr:@std/dotenv@~0.225.5",
       "npm:@sentry/deno@9.40.0"
     ]

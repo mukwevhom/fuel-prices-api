@@ -6,6 +6,9 @@ Sentry.init({
     sendDefaultPii: true,
     tracesSampleRate: 1.0,
     tracePropagationTargets: ["localhost", /^https:\/\/fuel\.underconstruction\.co\.za/],
+    integrations: [Sentry.captureConsoleIntegration({
+        levels: ["log", "info", "warn", "error", "debug", "assert"],
+    })]
 });
 
 import router from "./routes.ts";

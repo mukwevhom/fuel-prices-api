@@ -15,7 +15,7 @@ const index = async (ctx: Context) => {
 
         const {rows: inlandResults} = await inlandModel.select()
         
-        ctx.response.body = { msg: "fuel prices", coastalResults, inlandResults }
+        ctx.response.body = { msg: "fuel prices", dbpath: Deno.env.get("POSTGRESQL_CONNECTION_URI"), coastalResults, inlandResults }
         return;
     } catch (err) {
         Sentry.captureException(err);

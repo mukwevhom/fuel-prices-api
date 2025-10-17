@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@oak/oak": "jsr:@oak/oak@^17.1.5",
+    "@oak/oak": "jsr:@oak/oak@^17.1.6",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
     "postgres/": "https://deno.land/x/postgres@v0.19.3/",
     "sentry": "npm:@sentry/deno@9.40.0",
