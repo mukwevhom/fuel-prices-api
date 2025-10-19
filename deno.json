@@ -11,6 +11,7 @@
     "dev": "deno run --allow-net --allow-read --allow-env --unstable-cron --watch main.ts",
     "inspect": "deno run --allow-net --allow-env --allow-read --unstable-cron --inspect main.ts"
   },
+  "unstable": ["cron"],
   "deploy": {
     "project": "bcaffe74-9248-4a22-a7c7-fb28679b503b",
     "exclude": [
