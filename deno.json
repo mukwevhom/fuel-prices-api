@@ -7,17 +7,11 @@
     "cheerio/": "https://esm.sh/cheerio@1.0.0/"
   },
   "tasks": {
-    "start": "deno run --allow-net --allow-read --allow-env --unstable-cron main.ts",
-    "dev": "deno run --allow-net --allow-read --allow-env --unstable-cron --watch main.ts",
-    "inspect": "deno run --allow-net --allow-env --allow-read --unstable-cron --inspect main.ts"
+    "start": "deno run --allow-net --allow-read --allow-env main.ts",
+    "dev": "deno run --allow-net --allow-read --allow-env --watch main.ts",
+    "inspect": "deno run --allow-net --allow-env --allow-read --inspect main.ts"
   },
-  "unstable": ["cron"],
-  "deploy": {
-    "project": "bcaffe74-9248-4a22-a7c7-fb28679b503b",
-    "exclude": [
-      "**/node_modules"
-    ],
-    "include": [],
-    "entrypoint": "main.ts"
-  }
+  "unstable": [
+    "cron"
+  ]
 }
