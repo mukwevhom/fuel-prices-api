@@ -30,11 +30,12 @@ class Model {
 
     async insert(columns: string, values: (string|number)[][]) {
         const client = await this.pool.connect();
-        const transaction = client.createTransaction(`${this.table}_transact`);
 
         let result;
+        let transaction;
 
         try {
+            transaction = client.createTransaction(`${this.table}_transact`);
             await transaction.begin();
 
             const _valuesPlaceholder = columns.split(',').map((_t, i) => `$${i+1}`).join(', ')
@@ -45,7 +46,7 @@ class Model {
 
             await transaction.commit();
         } catch (err) {
-            await transaction.rollback();
+            if (transaction) await transaction.rollback();
             throw err;
         } finally {
             client.release()
