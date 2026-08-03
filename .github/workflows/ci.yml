@@ -23,12 +23,14 @@ jobs:
           - name: "🦕 Setup Deno"
             uses: denoland/setup-deno@v2
             with:
-              deno-version: v2.1.1
-        
-          - name: "Install deployctl"
-            run: deno install -gArf jsr:@deno/deployctl
+              deno-version: v2.x
 
           - name: "🥬 Deploy App"
             run: |
-                deployctl deploy --token="${{ secrets.DENO_DEPLOY_TOKEN }}" --="uc-fuel-scrapper" --prod
+                deno deploy \
+                  --token="${{ secrets.DENO_DEPLOY_TOKEN }}" \
+                  --app="fuel-prices-api" \
+                  --prod \
+                  --json \
+                  --non-interactive
 
