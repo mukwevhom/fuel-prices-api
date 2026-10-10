@@ -17,7 +17,7 @@ It is a Rust [Cloudflare Worker](https://developers.cloudflare.com/workers/langu
 
 ```bash
 rustup target add wasm32-unknown-unknown
-cargo install worker-build
+cargo install worker-build --version 0.8.7 --locked
 
 cargo test                 # unit tests (native)
 worker-build --release     # builds build/worker/shim.mjs + wasm
@@ -33,7 +33,7 @@ CI (`deploy-cloudflare`, on pushes to `main`) uses `wrangler.cloudflare.jsonc`. 
 
 ### Coolify (self-hosted, celld)
 
-Create a Coolify application from this repo with the **Dockerfile** build pack and port `8080`. The container installs celld, deploys the Worker, then serves it. Set these environment variables in Coolify: `CELLD_BUCKET` (e.g. `s3://my-bucket`), `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `S3_ENDPOINT` (R2/MinIO) and `AWS_REGION`. celld keeps all state in that bucket, so the container itself is stateless. Coolify's git webhook redeploys on push, so CI does not deploy to it.
+Create a Coolify application from this repo with the **Dockerfile** build pack and port `8080`. The container installs a checksum-verified celld (pinned in `scripts/install-tools.sh`), deploys the Worker, then serves it. Set these environment variables in Coolify: `CELLD_BUCKET` (e.g. `s3://my-bucket`), `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `S3_ENDPOINT` (R2/MinIO) and `AWS_REGION`. celld keeps all state in that bucket, so the container itself is stateless. Coolify's git webhook redeploys on push, so CI does not deploy to it.
 
 `wrangler.jsonc` is the celld config (celld rejects unknown keys); the D1 `database_id` there is just a stable identity, so keep it unchanged once data exists.
 
