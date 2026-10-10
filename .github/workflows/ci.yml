@@ -1,42 +1,42 @@
 name: CI
 
 on:
-    workflow_dispatch:
-    pull_request:
-    push:
-        branches: [main]
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
-          - uses: dtolnay/rust-toolchain@stable
-            with:
-              targets: wasm32-unknown-unknown
-          - uses: Swatinem/rust-cache@v2
-          - run: cargo test
-          - run: cargo build --release --target wasm32-unknown-unknown
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test
+      - run: cargo build --release --target wasm32-unknown-unknown
 
-    deploy-cloudflare:
-        needs: test
-        if: github.ref == 'refs/heads/main'
-        runs-on: ubuntu-latest
-        timeout-minutes: 15
-        steps:
-          - uses: actions/checkout@v4
-          - uses: dtolnay/rust-toolchain@stable
-            with:
-              targets: wasm32-unknown-unknown
-          - uses: Swatinem/rust-cache@v2
-          - run: cargo install worker-build && worker-build --release
-          - name: Set D1 id
-            run: sed -i "s/REPLACE_WITH_D1_ID/${{ secrets.CLOUDFLARE_D1_ID }}/" wrangler.cloudflare.jsonc
-          - uses: cloudflare/wrangler-action@v3
-            with:
-              apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-              accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-              command: deploy --config wrangler.cloudflare.jsonc
+  deploy-cloudflare:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo install worker-build && worker-build --release
+      - name: Set D1 id
+        run: sed -i "s/REPLACE_WITH_D1_ID/${{ secrets.CLOUDFLARE_D1_ID }}/" wrangler.cloudflare.jsonc
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --config wrangler.cloudflare.jsonc
