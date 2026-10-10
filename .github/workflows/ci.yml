@@ -21,33 +21,22 @@ jobs:
           - run: cargo test
           - run: cargo build --release --target wasm32-unknown-unknown
 
-    deploy:
+    deploy-cloudflare:
         needs: test
         if: github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
-        timeout-minutes: 10
+        timeout-minutes: 15
         steps:
           - uses: actions/checkout@v4
           - uses: dtolnay/rust-toolchain@stable
             with:
               targets: wasm32-unknown-unknown
           - uses: Swatinem/rust-cache@v2
-          - name: Build worker
-            run: cargo install worker-build && worker-build --release
-          - name: Install esbuild and celld
-            run: |
-              npm install -g esbuild
-              curl -fsSL https://celld.dev/install.sh | sh
-              echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          - name: Deploy with celld
-            env:
-              AWS_ACCESS_KEY_ID: ${{ secrets.CELLD_AWS_ACCESS_KEY_ID }}
-              AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLD_AWS_SECRET_ACCESS_KEY }}
-              AWS_REGION: auto
-              S3_ENDPOINT: ${{ secrets.CELLD_S3_ENDPOINT }}
-              CELLD_BUCKET: ${{ secrets.CELLD_BUCKET }}
-            run: |
-              celld deploy . \
-                --bucket "$CELLD_BUCKET" \
-                --endpoint "$S3_ENDPOINT" \
-                --region "$AWS_REGION"
+          - run: cargo install worker-build && worker-build --release
+          - name: Set D1 id
+            run: sed -i "s/REPLACE_WITH_D1_ID/${{ secrets.CLOUDFLARE_D1_ID }}/" wrangler.cloudflare.jsonc
+          - uses: cloudflare/wrangler-action@v3
+            with:
+              apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+              accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              command: deploy --config wrangler.cloudflare.jsonc

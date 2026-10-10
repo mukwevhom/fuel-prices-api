@@ -27,8 +27,14 @@ Run locally with `celld dev` (needs `esbuild` on `PATH`; serves on `http://127.0
 
 ## Deploying
 
-`celld deploy` needs `esbuild` and an S3-compatible bucket (for example Cloudflare R2). CI deploys on pushes to `main` using these repository secrets: `CELLD_BUCKET` (e.g. `s3://my-bucket`), `CELLD_S3_ENDPOINT`, `CELLD_AWS_ACCESS_KEY_ID`, `CELLD_AWS_SECRET_ACCESS_KEY`.
+### Cloudflare
 
-The D1 `database_id` in `wrangler.jsonc` is just a stable identity on celld; keep it unchanged once data exists. For Cloudflare proper, replace it with the id from `wrangler d1 create fuel-prices`.
+CI (`deploy-cloudflare`, on pushes to `main`) uses `wrangler.cloudflare.jsonc`. One-time setup: `wrangler d1 create fuel-prices`, then add repository secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_D1_ID` (the created database id). The Worker creates its tables on first request.
+
+### Coolify (self-hosted, celld)
+
+Create a Coolify application from this repo with the **Dockerfile** build pack and port `8080`. The container installs celld, deploys the Worker, then serves it. Set these environment variables in Coolify: `CELLD_BUCKET` (e.g. `s3://my-bucket`), `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `S3_ENDPOINT` (R2/MinIO) and `AWS_REGION`. celld keeps all state in that bucket, so the container itself is stateless. Coolify's git webhook redeploys on push, so CI does not deploy to it.
+
+`wrangler.jsonc` is the celld config (celld rejects unknown keys); the D1 `database_id` there is just a stable identity, so keep it unchanged once data exists.
 
 The cron schedule (`triggers.crons`) is `0 0 1-15 * FRI`: celld and Cloudflare number weekdays from Sunday = 1, so a name is used instead of `5`.
