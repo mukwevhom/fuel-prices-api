@@ -5,7 +5,7 @@ COPY . .
 RUN worker-build --release --locked
 
 FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates nodejs npm \
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 COPY scripts/install-tools.sh /tmp/install-tools.sh
 RUN INSTALL_DIR=/usr/local/bin /tmp/install-tools.sh && rm /tmp/install-tools.sh
