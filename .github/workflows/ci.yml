@@ -1,36 +1,52 @@
 name: CI
 
 on:
-    workflow_dispatch:
-    push:
-        branches: [main]
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-    deploy:
-        permissions:
-          contents: write
-          id-token: write
-          deployments: write
-        timeout-minutes: 3.5
-        runs-on: ["ubuntu-latest"]
-        steps:
-          - name: "🏨 Checkout"
-            uses: actions/checkout@v7
-    
-          - name: "🦕 Setup Deno"
-            uses: denoland/setup-deno@v2
-            with:
-              deno-version: v2.x
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: cargo install cargo-audit --version 0.22.2 --locked && cargo audit
+      - run: cargo test --locked
+      - run: cargo build --locked --release --target wasm32-unknown-unknown
 
-          - name: "🥬 Deploy App"
-            run: |
-                deno deploy \
-                  --token="${{ secrets.DENO_DEPLOY_TOKEN }}" \
-                  --app="fuel-prices-api" \
-                  --prod \
-                  --json \
-                  --non-interactive
-
+  deploy-cloudflare:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: cargo install worker-build --version 0.8.7 --locked && worker-build --release --locked
+      - name: Set D1 id
+        env:
+          D1_ID: ${{ secrets.CLOUDFLARE_D1_ID }}
+        run: sed -i "s/REPLACE_WITH_D1_ID/$D1_ID/" wrangler.cloudflare.jsonc
+      - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --config wrangler.cloudflare.jsonc

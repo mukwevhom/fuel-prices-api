@@ -1,0 +1,16 @@
+{
+  // Cloudflare deployment config. celld uses wrangler.jsonc (it rejects extra keys).
+  "name": "fuel-prices-api",
+  "main": "build/worker/shim.mjs",
+  "compatibility_date": "2026-01-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fuel-prices",
+      // CI replaces this placeholder with the CLOUDFLARE_D1_ID secret.
+      "database_id": "REPLACE_WITH_D1_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": { "crons": ["0 0 * * FRI#1"] }
+}
