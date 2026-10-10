@@ -10,5 +10,5 @@
     }
   ],
   // Cloudflare cron dialect: weekdays are numbered from Sunday = 1, so use a name.
-  "triggers": { "crons": ["0 0 1-15 * FRI"] }
+  "triggers": { "crons": ["0 0 * * FRI#1"] }
 }

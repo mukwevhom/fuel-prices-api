@@ -12,5 +12,5 @@
       "migrations_dir": "migrations"
     }
   ],
-  "triggers": { "crons": ["0 0 1-15 * FRI"] }
+  "triggers": { "crons": ["0 0 * * FRI#1"] }
 }

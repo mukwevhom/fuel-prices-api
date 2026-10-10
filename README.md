@@ -37,4 +37,4 @@ Create a Coolify application from this repo with the **Dockerfile** build pack a
 
 `wrangler.jsonc` is the celld config (celld rejects unknown keys); the D1 `database_id` there is just a stable identity, so keep it unchanged once data exists.
 
-The cron schedule (`triggers.crons`) is `0 0 1-15 * FRI`: celld and Cloudflare number weekdays from Sunday = 1, so a name is used instead of `5`.
+The cron schedule (`triggers.crons`) is `0 0 * * FRI#1`: 00:00 UTC on the first Friday of each month. Weekdays are named because celld and Cloudflare number them from Sunday = 1.
