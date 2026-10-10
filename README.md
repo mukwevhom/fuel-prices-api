@@ -20,7 +20,7 @@ rustup target add wasm32-unknown-unknown
 cargo install worker-build --version 0.8.7 --locked
 
 cargo test                 # unit tests (native)
-worker-build --release     # builds build/worker/shim.mjs + wasm
+worker-build --release --locked  # builds build/worker/shim.mjs + wasm
 ```
 
 Run locally with `celld dev` (needs `esbuild` on `PATH`; serves on `http://127.0.0.1:9876`). The Worker creates its D1 tables on first use from `migrations/0001_init.sql`; on a deployed fleet you can also run `celld d1 migrations apply fuel-prices --bucket "$CELLD_BUCKET"`.

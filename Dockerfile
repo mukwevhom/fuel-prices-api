@@ -2,7 +2,7 @@ FROM rust:1-bookworm AS build
 RUN rustup target add wasm32-unknown-unknown && cargo install worker-build --version 0.8.7 --locked
 WORKDIR /app
 COPY . .
-RUN worker-build --release
+RUN worker-build --release --locked
 
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates nodejs npm \
