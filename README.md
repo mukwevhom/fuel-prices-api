@@ -23,6 +23,12 @@ cargo test                 # unit tests (native)
 worker-build --release     # builds build/worker/shim.mjs + wasm
 ```
 
-Apply the schema in `migrations/` (`celld d1 migrations apply`, or `wrangler d1 migrations apply fuel-prices`), then run with `celld` (see its docs) using `wrangler.jsonc`, and deploy with `celld deploy`. Set the real D1 `database_id` in `wrangler.jsonc`.
+Run locally with `celld dev` (needs `esbuild` on `PATH`; serves on `http://127.0.0.1:9876`). The Worker creates its D1 tables on first use from `migrations/0001_init.sql`; on a deployed fleet you can also run `celld d1 migrations apply fuel-prices --bucket "$CELLD_BUCKET"`.
+
+## Deploying
+
+`celld deploy` needs `esbuild` and an S3-compatible bucket (for example Cloudflare R2). CI deploys on pushes to `main` using these repository secrets: `CELLD_BUCKET` (e.g. `s3://my-bucket`), `CELLD_S3_ENDPOINT`, `CELLD_AWS_ACCESS_KEY_ID`, `CELLD_AWS_SECRET_ACCESS_KEY`.
+
+The D1 `database_id` in `wrangler.jsonc` is just a stable identity on celld; keep it unchanged once data exists. For Cloudflare proper, replace it with the id from `wrangler d1 create fuel-prices`.
 
 The cron schedule (`triggers.crons`) is `0 0 1-15 * FRI`: celld and Cloudflare number weekdays from Sunday = 1, so a name is used instead of `5`.

@@ -34,7 +34,20 @@ jobs:
           - uses: Swatinem/rust-cache@v2
           - name: Build worker
             run: cargo install worker-build && worker-build --release
-          # Install celld and set its node/bucket credentials as repository secrets
-          # as described in https://celld.dev/docs, then deploy the built shim.
+          - name: Install esbuild and celld
+            run: |
+              npm install -g esbuild
+              curl -fsSL https://celld.dev/install.sh | sh
+              echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           - name: Deploy with celld
-            run: celld deploy
+            env:
+              AWS_ACCESS_KEY_ID: ${{ secrets.CELLD_AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLD_AWS_SECRET_ACCESS_KEY }}
+              AWS_REGION: auto
+              S3_ENDPOINT: ${{ secrets.CELLD_S3_ENDPOINT }}
+              CELLD_BUCKET: ${{ secrets.CELLD_BUCKET }}
+            run: |
+              celld deploy . \
+                --bucket "$CELLD_BUCKET" \
+                --endpoint "$S3_ENDPOINT" \
+                --region "$AWS_REGION"

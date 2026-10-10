@@ -9,6 +9,29 @@ use worker::*;
 use db::Region;
 use helpers::{compare_prices, offset_month};
 
+const SCHEMA: &str = include_str!("../migrations/0001_init.sql");
+
+thread_local! {
+    static SCHEMA_READY: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+/// Applies the idempotent schema once per isolate so a fresh database works without a manual migration.
+async fn ensure_schema(env: &Env) -> Result<()> {
+    if SCHEMA_READY.with(|r| r.get()) {
+        return Ok(());
+    }
+    let db = env.d1("DB")?;
+    let statements = SCHEMA
+        .split(';')
+        .map(str::trim)
+        .filter(|sql| !sql.is_empty())
+        .map(|sql| db.prepare(sql))
+        .collect::<Vec<_>>();
+    db.batch(statements).await?;
+    SCHEMA_READY.with(|r| r.set(true));
+    Ok(())
+}
+
 fn current_year_month() -> (i32, i32) {
     let now = js_sys::Date::new_0();
     (now.get_full_year() as i32, now.get_month() as i32 + 1)
@@ -105,6 +128,9 @@ fn failure(err: Error) -> Result<Response> {
 
 #[event(fetch)]
 async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    if let Err(err) = ensure_schema(&env).await {
+        return failure(err);
+    }
     let result = match (req.method(), req.path().as_str()) {
         (Method::Get, "/") => index(&env).await,
         (Method::Get, "/prices") => prices(&req, &env).await,
@@ -121,7 +147,11 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
 
 #[event(scheduled)]
 async fn scheduled(_event: ScheduledEvent, env: Env, _ctx: ScheduleContext) {
-    if let Err(err) = scrape_current(&env).await {
+    let outcome = match ensure_schema(&env).await {
+        Ok(()) => scrape_current(&env).await,
+        Err(e) => Err(e),
+    };
+    if let Err(err) = outcome {
         console_error!("scheduled scrape failed: {err}");
     }
 }

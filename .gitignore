@@ -4,3 +4,5 @@
 /build
 .celld
 .wrangler
+.dev.vars
+.env.local

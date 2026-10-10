@@ -2,15 +2,11 @@
   "name": "fuel-prices-api",
   "main": "build/worker/shim.mjs",
   "compatibility_date": "2026-01-01",
-  "build": {
-    "command": "cargo install -q worker-build && worker-build --release"
-  },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "fuel-prices",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "migrations"
+      "database_id": "415e90d3-274e-4a01-8e54-af698212fc9a"
     }
   ],
   // Cloudflare cron dialect: weekdays are numbered from Sunday = 1, so use a name.
