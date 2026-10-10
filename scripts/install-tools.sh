@@ -26,4 +26,4 @@ mkdir -p "$install_dir"
 gzip -dc "$tmp/celld.gz" > "$install_dir/celld"
 chmod 755 "$install_dir/celld"
 
-npm install -g "esbuild@$ESBUILD_VERSION"
+npm install -g --ignore-scripts "esbuild@$ESBUILD_VERSION"
