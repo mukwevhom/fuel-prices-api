@@ -1,2 +1,6 @@
 .env
 .DS_Store
+/target
+/build
+.celld
+.wrangler

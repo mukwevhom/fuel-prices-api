@@ -2,6 +2,7 @@ name: CI
 
 on:
     workflow_dispatch:
+    pull_request:
     push:
         branches: [main]
 
@@ -9,28 +10,31 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-    deploy:
-        permissions:
-          contents: write
-          id-token: write
-          deployments: write
-        timeout-minutes: 3.5
-        runs-on: ["ubuntu-latest"]
+    test:
+        runs-on: ubuntu-latest
         steps:
-          - name: "🏨 Checkout"
-            uses: actions/checkout@v7
-    
-          - name: "🦕 Setup Deno"
-            uses: denoland/setup-deno@v2
+          - uses: actions/checkout@v4
+          - uses: dtolnay/rust-toolchain@stable
             with:
-              deno-version: v2.x
+              targets: wasm32-unknown-unknown
+          - uses: Swatinem/rust-cache@v2
+          - run: cargo test
+          - run: cargo build --release --target wasm32-unknown-unknown
 
-          - name: "🥬 Deploy App"
-            run: |
-                deno deploy \
-                  --token="${{ secrets.DENO_DEPLOY_TOKEN }}" \
-                  --app="fuel-prices-api" \
-                  --prod \
-                  --json \
-                  --non-interactive
-
+    deploy:
+        needs: test
+        if: github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+          - uses: actions/checkout@v4
+          - uses: dtolnay/rust-toolchain@stable
+            with:
+              targets: wasm32-unknown-unknown
+          - uses: Swatinem/rust-cache@v2
+          - name: Build worker
+            run: cargo install worker-build && worker-build --release
+          # Install celld and set its node/bucket credentials as repository secrets
+          # as described in https://celld.dev/docs, then deploy the built shim.
+          - name: Deploy with celld
+            run: celld deploy
